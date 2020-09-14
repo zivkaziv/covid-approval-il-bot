@@ -7,8 +7,7 @@ const requestExecuter = async (textSender, photoSender, username, password) => {
 	// Check if we already have file with today's approval
 	try {
 		const todayDate = new Date().toISOString().slice(0, 10);
-		const todaysApproval = fs.readFileSync(`./${todayDate}.png`);
-		if (todaysApproval) {
+		if (fs.existsSync(`./${todayDate}.png`)) {
 			await photoSender(`${todayDate}.png`);
 			return {
 				success: {},
@@ -22,6 +21,9 @@ const requestExecuter = async (textSender, photoSender, username, password) => {
 		return {
 			failed: {},
 		};
+	} else if (response.error) {
+		await photoSender(`1.png`);
+		await photoSender(`2.png`);
 	} else {
 		await photoSender(`${response.file}.png`);
 		return {
