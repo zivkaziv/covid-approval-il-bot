@@ -30,13 +30,13 @@ const scrape = async (username, password) => {
 		await page.goto(
 			"https://parents.education.gov.il/prhnet/parents/rights-obligations-regulations/health-statement-kindergarden?utm_source=sms"
 		);
-		await page.screenshot({ path: `1.png` });
 		console.log(`${username} - open website`);
-		await page.waitFor(3500);
+		await page.waitForSelector('input[value="מילוי הצהרת בריאות מקוונת"]')
+		await page.screenshot({ path: `1.png` });
 		// Press fill parent approval
-		await page.screenshot({ path: `2.png` });
 		await page.click('input[value="מילוי הצהרת בריאות מקוונת"]');
 		await page.waitFor(2000);
+		await page.screenshot({ path: `2.png` });
 
 		// Fill username
 		await page.type("#HIN_USERID", username);
@@ -45,6 +45,7 @@ const scrape = async (username, password) => {
 		// Submit
 		await page.click(".submit.user-pass-submit");
 		await page.waitFor(2000);
+		await page.screenshot({ path: `3.png` });
 
 		// Is already approved
 		const isExists = await page.$(".fa-check-circle");
