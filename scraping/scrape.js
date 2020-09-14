@@ -31,10 +31,10 @@ const scrape = async (username, password) => {
 			"https://parents.education.gov.il/prhnet/parents/rights-obligations-regulations/health-statement-kindergarden?utm_source=sms"
 		);
 		console.log(`${username} - open website`);
-		await page.waitFor(1500);
+		await page.waitFor(3500);
 		// Press fill parent approval
 		await page.click('input[value="מילוי הצהרת בריאות מקוונת"]');
-		await page.waitFor(1000);
+		await page.waitFor(2000);
 
 		// Fill username
 		await page.type("#HIN_USERID", username);
