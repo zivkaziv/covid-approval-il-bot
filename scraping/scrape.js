@@ -35,18 +35,21 @@ const scrape = async (username, password) => {
 		await page.screenshot({ path: `1.png` });
 		// Press fill parent approval
 		await page.click('input[value="מילוי הצהרת בריאות מקוונת"]');
-		await page.waitFor(2000);
-		await page.screenshot({ path: `2.png` });
 
+		// Login page
+		await page.waitForSelector("#HIN_USERID")
+		await page.screenshot({ path: `2.png` });
 		// Fill username
 		await page.type("#HIN_USERID", username);
 		// Fill password
 		await page.type("#Ecom_Password", password);
 		// Submit
 		await page.click(".submit.user-pass-submit");
-		await page.waitFor(2000);
 		await page.screenshot({ path: `3.png` });
 
+		// Header
+		await page.waitForSelector('h1.page-title.title');
+		await page.screenshot({ path: `4.png` });
 		// Is already approved
 		const isExists = await page.$(".fa-check-circle");
 		if (!isExists) {
