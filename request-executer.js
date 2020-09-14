@@ -16,14 +16,14 @@ const requestExecuter = async (textSender, photoSender, username, password) => {
 	} catch (e) {}
 
 	const response = await scrape(username, password);
-	if (!response.file) {
+	if (response.error) {
+		await photoSender(`1.png`);
+		await photoSender(`2.png`);
+	} else if (!response.file) {
 		await textSender(message);
 		return {
 			failed: {},
 		};
-	} else if (response.error) {
-		await photoSender(`1.png`);
-		await photoSender(`2.png`);
 	} else {
 		await photoSender(`${response.file}.png`);
 		return {
