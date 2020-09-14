@@ -31,32 +31,34 @@ const scrape = async (username, password) => {
 			"https://parents.education.gov.il/prhnet/parents/rights-obligations-regulations/health-statement-kindergarden?utm_source=sms"
 		);
 		console.log(`${username} - open website`);
-		await page.waitForSelector('input[value="מילוי הצהרת בריאות מקוונת"]')
-		await page.screenshot({ path: `1.png` });
+		await page.waitForSelector('input[value="מילוי הצהרת בריאות מקוונת"]');
 		// Press fill parent approval
 		await page.click('input[value="מילוי הצהרת בריאות מקוונת"]');
 
 		// Login page
-		await page.waitForSelector("#HIN_USERID")
-		await page.screenshot({ path: `2.png` });
+		await page.waitForSelector("#HIN_USERID");
 		// Fill username
 		await page.type("#HIN_USERID", username);
 		// Fill password
 		await page.type("#Ecom_Password", password);
 		// Submit
 		await page.click(".submit.user-pass-submit");
-		await page.screenshot({ path: `3.png` });
 
 		// Header
-		await page.waitForSelector('h1.page-title.title');
-		await page.screenshot({ path: `4.png` });
+		await page.waitForSelector("h1.page-title.title");
+		await page.waitFor(2000);
+
 		// Is already approved
 		const isExists = await page.$(".fa-check-circle");
 		if (!isExists) {
 			// Approval
 			await page.click('input[value="מילוי הצהרת בריאות"]');
-			await page.waitFor(2000);
+			await page.waitForSelector('input[value="אישור"]');
 			await page.click('input[value="אישור"]');
+			await page.waitFor(2000);
+			await page.evaluate( () => {
+                window.scrollBy(0, 0);
+            });
 		}
 
 		const todayDate = new Date().toISOString().slice(0, 10);
@@ -70,8 +72,8 @@ const scrape = async (username, password) => {
 		console.error(e);
 		await browser.close();
 		return {
-			error:'faild'
-		}
+			error: "faild",
+		};
 	}
 };
 
