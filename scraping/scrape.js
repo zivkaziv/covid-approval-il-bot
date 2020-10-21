@@ -49,7 +49,7 @@ const scrape = async (username, password) => {
 		await page.waitFor(2000);
 
 		// Is already approved
-		const isExists = await page.$(".fa-check-circle");
+		const isExists = await page.$('input[value="מילוי הצהרת בריאות"]');
 		if (!isExists) {
 			// Approval
 			await page.click('input[value="מילוי הצהרת בריאות"]');
