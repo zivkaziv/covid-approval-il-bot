@@ -9,10 +9,6 @@ const chromeOptions = {
 	args: [
 		"--incognito",
 		"--no-sandbox",
-		// "--disable-setuid-sandbox",
-		// '--user-data-dir="/tmp/chromium"',
-		// "--disable-web-security",
-		// "--disable-features=site-per-process",
 		"--single-process",
 		"--no-zygote",
 	],
@@ -49,7 +45,7 @@ const scrape = async (username, password) => {
 		await page.waitFor(2000);
 
 		// Is already approved
-		const isExists = await page.$('input[value="מילוי הצהרת בריאות"]');
+		const isExists = await page.$x("//div[contains(text(), 'מולאה הצהרת בריאות')]");
 		if (!isExists) {
 			// Approval
 			await page.click('input[value="מילוי הצהרת בריאות"]');
