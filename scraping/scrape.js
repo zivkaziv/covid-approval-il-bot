@@ -45,8 +45,8 @@ const scrape = async (username, password) => {
 		await page.waitFor(2000);
 
 		// Is already approved
-		const isExists = await page.$x("//div[contains(text(), 'מולאה הצהרת בריאות')]");
-		if (!isExists) {
+		const isNotExists = await page.$('.ng-star-inserted input[value="מילוי הצהרת בריאות"]');
+		if (isNotExists) {
 			// Approval
 			await page.click('input[value="מילוי הצהרת בריאות"]');
 			await page.waitForSelector('input[value="אישור"]');
