@@ -51,10 +51,9 @@ const scrape = async (username, password) => {
 			await page.click('input[value="מילוי הצהרת בריאות"]');
 			await page.waitForSelector('input[value="אישור"]');
 			await page.click('input[value="אישור"]');
-			await page.waitFor(2000);
-			await page.evaluate( () => {
-                window.scrollBy(0, 0);
-            });
+			await page.waitFor(3000);
+			// Refresh the page to make sure it's signed
+			await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
 		}
 
 		const todayDate = new Date().toISOString().slice(0, 10);
