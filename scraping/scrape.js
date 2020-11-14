@@ -6,13 +6,27 @@ const chromeOptions = {
 	headless: true,
 	defaultViewport: null,
 	slowMo: 10,
-	args: [
-		"--incognito",
-		"--no-sandbox",
-		"--single-process",
-		"--no-zygote",
-	],
+	args: ["--incognito", "--no-sandbox", "--single-process", "--no-zygote"],
 };
+
+const handleLogin = async (page, username, password) => {
+	// enter directly to login page
+	console.log(`${username} - enter to login page`);
+	// Login page
+	await page.waitForSelector('fieldset input[tabindex="1"]');
+	await page.waitFor(3000);
+	// Fill username
+	await page.type('fieldset input[tabindex="1"]', username);
+	console.log(`${username} -fill user name - ${username}`);
+	// Fill password
+	await page.type('input[tabindex="2"]', password);
+	console.log(`${username} -fill password - ${password}`);
+	// Submit
+	await page.waitFor(3000);
+	// await page.keyboard.press('Enter');
+	await page.click('button[tabindex="3"]');
+	console.log(`${username} - submit form`);
+}
 
 const scrape = async (username, password) => {
 	console.log(`${username} - Start sraping`);
@@ -20,32 +34,38 @@ const scrape = async (username, password) => {
 	const browser = await puppeteer.launch(chromeOptions);
 	try {
 		console.log(`${username} - puppeteer.launch`);
-		const page = await browser.newPage();
+		const pages = await browser.pages();
+		const page = pages[0];
+		
 		console.log(`${username} - browser.newPage`);
 		// await page.setDefaultNavigationTimeout(0);
 		await page.goto(
 			"https://parents.education.gov.il/prhnet/parents/rights-obligations-regulations/health-statement-kindergarden?utm_source=sms"
 		);
 		console.log(`${username} - open website`);
+		await page.click(".page-title.title");
+		console.log(`${username} - clicked title`);
 		await page.waitForSelector('input[value="מילוי הצהרת בריאות מקוונת"]');
 		// Press fill parent approval
 		await page.click('input[value="מילוי הצהרת בריאות מקוונת"]');
+		console.log(`${username} - clicked fill health statment`);
 
-		// Login page
-		await page.waitForSelector("#HIN_USERID");
-		// Fill username
-		await page.type("#HIN_USERID", username);
-		// Fill password
-		await page.type("#Ecom_Password", password);
-		// Submit
-		await page.click(".submit.user-pass-submit");
+		await handleLogin(page, username, password);
+
+		// In case we reidrected back to the login. try again
+		if(page.url().indexOf('lgn') > 0){
+			await handleLogin(page, username, password);
+		}
 
 		// Header
 		await page.waitForSelector("h1.page-title.title");
 		await page.waitFor(2000);
+		console.log(`${username} - logged in`);
 
 		// Is already approved
-		const isNotExists = await page.$('.ng-star-inserted input[value="מילוי הצהרת בריאות"]');
+		const isNotExists = await page.$(
+			'.ng-star-inserted input[value="מילוי הצהרת בריאות"]'
+		);
 		if (isNotExists) {
 			// Approval
 			await page.click('input[value="מילוי הצהרת בריאות"]');

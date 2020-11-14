@@ -13,10 +13,10 @@
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "http": "0.0.1-security",
-    "mongoose": "^5.10.2",
-    "puppeteer": "^5.2.1",
+    "mongoose": "^5.10.14",
+    "puppeteer": "^5.4.1",
     "puppeteer-extra": "^3.1.13",
-    "puppeteer-extra-plugin-stealth": "^2.4.14",
+    "puppeteer-extra-plugin-stealth": "^2.6.5",
     "telebot": "^1.4.1"
   }
 }
