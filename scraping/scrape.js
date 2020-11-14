@@ -42,6 +42,7 @@ const scrape = async (username, password) => {
 		await page.goto(
 			"https://parents.education.gov.il/prhnet/parents/rights-obligations-regulations/health-statement-kindergarden?utm_source=sms"
 		);
+		await page.waitForSelector('.page-title.title');
 		console.log(`${username} - open website`);
 		await page.click(".page-title.title");
 		console.log(`${username} - clicked title`);
