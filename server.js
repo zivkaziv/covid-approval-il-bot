@@ -32,6 +32,27 @@ app.post("/messages/:token", async (req, res) => {
 	}
 });
 
+app.get("/send-approval/:id", async (req, res) => {
+	const { requestExecuter } = require("./request-executer");
+    const User = require("./models/User");
+    const { photoSender, textSender } = require("./telegram/senders");
+
+    const username = req.params.id;
+	const user = await User.findOne({ username });
+    if (user) {
+		await requestExecuter(
+			textSender(user.chatId),
+			photoSender(user.chatId),
+			user.username,
+			user.password
+		);
+		res.status(200).send();
+	} else {
+		console.error(`User with username ${username} wasn't found in the DB`);
+		res.status(404).send();
+	}
+})
+
 app.get("/admin/:name", function (req, res) {
 	res.sendFile(path.join(__dirname + `/public/admin/${req.params.name}.html`));
 });
