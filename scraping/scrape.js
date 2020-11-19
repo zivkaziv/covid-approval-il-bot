@@ -73,6 +73,10 @@ const scrape = async (username, password) => {
 			await page.waitForSelector('input[value="אישור"]');
 			await page.click('input[value="אישור"]');
 			await page.waitFor(3000);
+			// Scroll to top
+			await page.evaluate( () => {
+                window.document.documentElement.scrollTop = 0
+            });
 			// Refresh the page to make sure it's signed
 			await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
 		}
