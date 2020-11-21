@@ -78,7 +78,7 @@ const scrape = async (username, password) => {
                 window.document.documentElement.scrollTop = 0
             });
 			// Refresh the page to make sure it's signed
-			await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
+			// await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
 		}
 
 		const todayDate = new Date().toISOString().slice(0, 10);

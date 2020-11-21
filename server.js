@@ -32,7 +32,7 @@ app.post("/messages/:token", async (req, res) => {
 	}
 });
 
-app.get("/send-approval/:id", async (req, res) => {
+app.all("/send-approval/:id", async (req, res) => {
 	const { requestExecuter } = require("./request-executer");
     const User = require("./models/User");
     const { photoSender, textSender } = require("./telegram/senders");
