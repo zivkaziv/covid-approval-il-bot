@@ -26,7 +26,7 @@ const handleLogin = async (page, username, password) => {
 	// await page.keyboard.press('Enter');
 	await page.click('button[tabindex="3"]');
 	console.log(`${username} - submit form`);
-}
+};
 
 const scrape = async (username, password) => {
 	console.log(`${username} - Start sraping`);
@@ -36,13 +36,13 @@ const scrape = async (username, password) => {
 		console.log(`${username} - puppeteer.launch`);
 		const pages = await browser.pages();
 		const page = pages[0];
-		
+
 		console.log(`${username} - browser.newPage`);
 		// await page.setDefaultNavigationTimeout(0);
 		await page.goto(
 			"https://parents.education.gov.il/prhnet/parents/rights-obligations-regulations/health-statement-kindergarden?utm_source=sms"
 		);
-		await page.waitForSelector('.page-title.title');
+		await page.waitForSelector(".page-title.title");
 		console.log(`${username} - open website`);
 		await page.click(".page-title.title");
 		console.log(`${username} - clicked title`);
@@ -54,7 +54,7 @@ const scrape = async (username, password) => {
 		await handleLogin(page, username, password);
 
 		// In case we reidrected back to the login. try again
-		if(page.url().indexOf('lgn') > 0){
+		if (page.url().indexOf("lgn") > 0) {
 			await handleLogin(page, username, password);
 		}
 
@@ -67,6 +67,7 @@ const scrape = async (username, password) => {
 		const isNotExists = await page.$(
 			'.ng-star-inserted input[value="מילוי הצהרת בריאות"]'
 		);
+		let fullPage = false;
 		if (isNotExists) {
 			// Approval
 			await page.click('input[value="מילוי הצהרת בריאות"]');
@@ -74,15 +75,16 @@ const scrape = async (username, password) => {
 			await page.click('input[value="אישור"]');
 			await page.waitFor(3000);
 			// Scroll to top
-			await page.evaluate( () => {
-                window.document.documentElement.scrollTop = 0
-            });
+			await page.evaluate(() => {
+				window.document.documentElement.scrollTop = 0;
+			});
+			fullPage = true;
 			// Refresh the page to make sure it's signed
 			// await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
 		}
 
 		const todayDate = new Date().toISOString().slice(0, 10);
-		await page.screenshot({ path: `${todayDate}.png` });
+		await page.screenshot({ path: `${todayDate}.png`, fullPage });
 		console.log(`${username} - taking screenshot`);
 		await browser.close();
 		return {
